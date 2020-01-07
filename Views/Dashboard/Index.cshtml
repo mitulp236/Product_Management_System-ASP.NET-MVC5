@@ -1,0 +1,93 @@
+﻿@model IEnumerable<demo_project.Models.Product>
+@{
+    ViewBag.Title = "WebGrid";
+    WebGrid wb = new WebGrid(source: Model, rowsPerPage: 5);
+}
+
+
+<h3>@ViewBag.message</h3>
+<p>@Html.ActionLink("Add New Product ", "Create")</p>
+
+
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>
+            Products
+            @if (ViewBag.searchstr != null)
+            {
+                <span class="text-muted">search item : "@ViewBag.searchstr"</span>
+            }
+        </h2>
+    </div>
+
+    @using (Html.BeginForm())
+    {   <div class="col-md-3">
+            <div class="">
+                <div class="">
+                    <input type="text" class="form-control" name="searchstr" placeholder="search product..." />
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="submit" class="btn btn-default" value="search" />
+        </div>
+   }
+        
+    </div>
+<hr />
+
+
+@{
+    if (TempData["message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="/Dashboard" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @TempData["message"]
+        </div>
+    }
+
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".checkbox_d").click(function(){
+
+            if ($("#my_product input:checkbox:checked").length > 0)
+            {
+                //document.getElementById("delete").style.visibility = "visible";
+                document.getElementById("delete").disabled = false;
+            }
+            else
+            {
+                //document.getElementById("delete").style.visibility = "hidden";
+                document.getElementById("delete").disabled = true;
+            }
+        });
+    });
+</script> 
+
+
+@using (Html.BeginForm("multi_delete", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return confirm('are you sure ?')", id="my_product" }))
+{
+    <input type="submit" disabled="disabled" class="btn btn-default delete_btn" id="delete" value="Delete Selected Products" name="Delete" />
+    @wb.GetHtml(
+        tableStyle: "table",
+        htmlAttributes: new { @id = "wb" },
+        columns: wb.Columns(
+            wb.Column(format: @<text>
+                    <input type="checkbox" class=" checkbox_d" name="checkbox" value="@item.ProductId" onclick="_check()" />
+            </text>),
+wb.Column("Simage", "Image", format:
+                                                            @<text>
+                                                                <img src="@Url.Content(item.Simage)" alt="not found" height="80" width="80" />
+                                                            </text>),
+
+                            wb.Column("Category", "Category"),
+                            wb.Column("ProductName", "Name"),
+                            wb.Column("Price", "Price"),
+                            wb.Column("Sdescription", "Short Description"),
+                            wb.Column("ProductId", "Operation", format:@<text>@Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) | @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })</text>)
+
+))}

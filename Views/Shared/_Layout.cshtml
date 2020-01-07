@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Product Management System</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/extra.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    
+</head>
+<body>
+    <div>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Product Management System", "Index", "Home", new { area = "" }, new { @class = " header_font_style navbar-brand " })
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    
+                    <ul class="nav navbar-nav navbar-right">
+
+                        @{
+                            if (Session["email"] != null)
+                            {
+                                <li><a href="#"> Welcome, @(Session["user"])</a></li>
+                                <li><a href="/Auth/Logout"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+                                
+                            }
+                            else
+                            {
+                                if (ViewBag.title == "signup")
+                                {
+                                    <li><a href="/Auth/Login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="/Auth/Signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                                }
+
+                            }
+                        }
+                    </ul>
+                    
+                </div><!--/.navbar-collapse -->
+            </div>
+        </nav>
+      
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer class="footer">
+            <div class="container">
+                <span class="text-muted"><p>&copy; @DateTime.Now.Year - Product Management System By Mitul Patel</p></span>
+            </div>
+        </footer>
+       
+    </div>
+
+    
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>
